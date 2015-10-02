@@ -9,6 +9,7 @@ function convert() {
 		s/\[/\n\[\n/g;
 		s/\]/\n\]\n/g' | 
 	grep -v '" *:'|
+	grep '[^ \t]' |
 	awk '
 		/\[/ { 
 			capture=1
