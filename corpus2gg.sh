@@ -33,6 +33,7 @@ function convert() {
 
 for x in "$@" ; do
 	if [[ -e "$x" ]] ; then
+		echo "# Converted by corpus2gg from $x"
 		cat "$x" | convert $(echo "$x" | sed 's/\.json$//;s/^.*\///;s/ /_/g;s/-/_/g;s/^/corpus_/')
 		echo
 	else
