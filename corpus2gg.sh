@@ -2,6 +2,13 @@
 
 function convert() {
 	name="$1"
+	tr -d '\r' |
+	sed '
+		s/{/\n{\n/g;
+		s/}/\n}\n/g;
+		s/\[/\n\[\n/g;
+		s/\]/\n\]\n/g' | 
+	grep -v '" *:'|
 	awk '
 		/\[/ { 
 			capture=1
@@ -13,10 +20,10 @@ function convert() {
 			if(capture) { 
 				print $0 
 			} 
-		}' | grep -v '\[' | grep -v '{' | 
+		}' | grep -v '\[' | grep -v '{' | grep -v '\]' | grep -v '}' |
 		sed '
 			s/^[ \t]*"//;
-			s/",*$//'  |
+			s/" *,* *$//'  |
 		tr '\n' ',' |
 		sed '
 			s/^/'"$name"':=/g;
@@ -25,7 +32,7 @@ function convert() {
 
 for x in "$@" ; do
 	if [[ -e "$x" ]] ; then
-		cat "$x" | convert $(echo "$x" | sed 's/\.json$//;s/^.*\///;s/ /_/g')
+		cat "$x" | convert $(echo "$x" | sed 's/\.json$//;s/^.*\///;s/ /_/g;s/-/_/g')
 		echo
 	else
 		convert "$x"
