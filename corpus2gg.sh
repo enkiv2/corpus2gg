@@ -33,7 +33,7 @@ function convert() {
 
 for x in "$@" ; do
 	if [[ -e "$x" ]] ; then
-		cat "$x" | convert $(echo "$x" | sed 's/\.json$//;s/^.*\///;s/ /_/g;s/-/_/g')
+		cat "$x" | convert $(echo "$x" | sed 's/\.json$//;s/^.*\///;s/ /_/g;s/-/_/g;s/^/corpus_/')
 		echo
 	else
 		convert "$x"
