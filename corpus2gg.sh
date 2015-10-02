@@ -9,7 +9,6 @@ function convert() {
 		s/\[/\n\[\n/g;
 		s/\]/\n\]\n/g' | 
 	grep -v '" *:'|
-	grep '[^ \t]' |
 	awk '
 		/\[/ { 
 			capture=1
@@ -23,12 +22,15 @@ function convert() {
 			} 
 		}' | grep -v '\[' | grep -v '{' | grep -v '\]' | grep -v '}' |
 		sed '
-			s/^[ \t]*"//;
-			s/" *,* *$//'  |
+			s/^[ 	]*"//;
+			s/" *,* *$//;
+			s/,/\\,/g;'  |
+		tr -d '"' |
+		grep '[^ 	]' |
 		tr '\n' ',' |
 		sed '
 			s/^/'"$name"':=/g;
-			s/,$//'
+			s/,[	 ]*$//' 
 }
 
 for x in "$@" ; do
